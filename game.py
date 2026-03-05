@@ -1,6 +1,16 @@
 import pygame as pg
-if __name__ == "__main__":
+
+class boats(pg.sprite.Sprite):
+    def __init__(self, name: str, size: int, bType: str):
+        self.name = name
+        self.size = size
+        self.type = bType
+
     
+
+
+if __name__ == "__main__":
+    pg.sprite.Group
     pg.init()
     screen = pg.display.set_mode((800, 600))
     pg.display.set_caption("Batalha Naval")
