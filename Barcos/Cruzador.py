@@ -1,4 +1,4 @@
-from Navios import Navios
+from .Navios import Navios
 
 class cruzador(Navios):
     def __init__(self, nome):

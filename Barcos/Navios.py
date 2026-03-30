@@ -7,15 +7,13 @@ class Navios:
         self.afundado = False
 
     def posicionar(self, posicoes: list):
-        for each in posicoes:
-            if not each.validade(): return False
         self.posicoes = posicoes
         
     def acertado(self, posicao):
         if posicao in self.posicoes:
             self.atingidos.append(posicao)
-            if(self.afundou()): return f"Navio {self.name} afundou"
-            return f"Navio {self.name} atingido na posição: {posicao.__str__()}"
+            if(self.afundou()): return f"Navio {self.nome} afundou"
+            return f"Navio {self.nome} atingido na posição: {posicao.__str__()}"
         return False
     
     def afundou(self):

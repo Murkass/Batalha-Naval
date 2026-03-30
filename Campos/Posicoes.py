@@ -5,6 +5,14 @@ class posicoes:
 
     def __str__(self):
         return f"Linha: {self.linha}, Coluna: {self.coluna}"
+    
+    def __eq__(self, other):
+        if not isinstance(other, posicoes):
+            return False
+        return self.linha == other.linha and self.coluna == other.coluna
+    
+    def __hash__(self):
+        return hash((self.linha, self.coluna))
 
     def validade(self, tabuleiro):
         if((self.linha < 0 or self.linha >= tabuleiro.tamanho )or (self.coluna < 0 or self.coluna >= tabuleiro.tamanho)):

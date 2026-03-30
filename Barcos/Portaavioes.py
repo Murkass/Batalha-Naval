@@ -1,4 +1,4 @@
-from Navios import Navios
+from .Navios import Navios
 
 class portaavioes(Navios):
     def __init__(self, nome):

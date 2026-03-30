@@ -6,7 +6,8 @@ class Tabuleiro:
 
     def posicionar_navio(self, navio, posicoes: list):
         for each in posicoes:
-            if not each.validade(): return False
+            if not each.validade(self): 
+                return False
         navio.posicionar(posicoes)
         self.navios.append(navio)
         return True
