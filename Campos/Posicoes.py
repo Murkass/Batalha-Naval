@@ -4,7 +4,7 @@ class posicoes:
         self.coluna = coluna
 
     def __str__(self):
-        return f"Linha: {self.linha}, Coluna: {self.coluna}"
+        return f"l {self.linha}, c {self.coluna}"
     
     def __eq__(self, other):
         if not isinstance(other, posicoes):
@@ -24,11 +24,18 @@ class posicoes:
                 return False
         return True
     
-    def indices(self):
-        return {"l": self.linha, "c": self.coluna}
-    
 
 if __name__ == '__main__':
-    posicao1 = posicoes(1, 2)
+    p1 = posicoes(1, 2)
+    p2 = posicoes(1, 2)
 
-    print(posicao1.__str__())
+    p3 = posicoes(2, 1)
+    p4 = posicoes(2, 1)
+
+    ar1 = [p3, p1]
+    ar2 = [p2, p4]
+
+    ar1.sort(key=lambda x: (x.linha, x.coluna))
+    ar2.sort(key=lambda x: (x.linha, x.coluna))
+
+    print(ar1 == ar2)

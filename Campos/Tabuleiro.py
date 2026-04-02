@@ -3,6 +3,7 @@ class Tabuleiro:
         self.tamanho = tamanho
         self.navios = []
         self.atingidos = []
+        self.clicados = []
 
     def posicionar_navio(self, navio, posicoes: list):
         for each in posicoes:
@@ -15,7 +16,9 @@ class Tabuleiro:
     def registrar_tiro(self, posicao):
         for navio in self.navios:
             resultado = navio.acertado(posicao)
-            if resultado:
+            if resultado["status"]:
                 self.atingidos.append(posicao)
+                self.clicados.append(posicao)
                 return resultado
-        return "Tiro na água"
+        self.clicados.append(posicao)
+        return {"status": False, "message": "Tiro na água"}

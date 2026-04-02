@@ -11,10 +11,9 @@ import random
 # Inicializar pygame
 init()
 
-#TODO: Adicionar a logica de jogar novamente quando uma dos dois acerta a posição do inimigo
+#TODO: Falta só a notificação de quando um navio foi acertado ou afundado
 #TODO: arrumar o espeço que mostra qual dos navios está para ser posicionado, e orientado
 #TODO: Adicionar as bombas e logicas para cada uma e as opções que podem ser utilizadas durante o jogo
-#TODO: Arrumar o que mostra o lugar do tiro disparado e se um navio foi atingido ou afundado
 
 # Configurações da tela
 SCREEN_WIDTH = 1200
@@ -174,7 +173,7 @@ def desenhar_tabuleiro_posicionamento(x, y, tab, posicoes_clicadas, titulo):
             draw.rect(screen, GREEN, (px, py, CELL_SIZE - 1, CELL_SIZE - 1))
     
     # Desenhar tiros (posições clicadas)
-    for posicao in posicoes_clicadas:
+    for posicao in tabuleiro_jogador.clicados:
         px = x + 1 + posicao.coluna * CELL_SIZE
         py = y + 1 + posicao.linha * CELL_SIZE
         draw.circle(screen, RED, (px + CELL_SIZE // 2, py + CELL_SIZE // 2), 5)
@@ -334,8 +333,7 @@ def jogar_maquina():
         linha = random.randint(0, TAMANHO_GRADE - 1)
         coluna = random.randint(0, TAMANHO_GRADE - 1)
         pos = posicoes(linha, coluna)
-        if pos not in posicoes_clicadas_maquina:
-            posicoes_clicadas_maquina.append(pos)
+        if pos not in tabuleiro_jogador.clicados:
             resultado = tabuleiro_jogador.registrar_tiro(pos)
             print(f"Máquina atira em ({linha}, {coluna}): {resultado}")
             return
@@ -391,7 +389,7 @@ def desenhar_tabuleiro(turno, tempo_turno):
                  (col_x, PADDING_TOP + BOARD_HEIGHT - 2), 1)
     
     # Desenhar tiros do jogador no tabuleiro da máquina
-    for posicao in posicoes_clicadas_jogador:
+    for posicao in tabuleiro_maquina.clicados:
         px = PADDING_LEFT_MAQUINA + 1 + posicao.coluna * CELL_SIZE
         py = PADDING_TOP + 1 + posicao.linha * CELL_SIZE
         draw.circle(screen, RED, (px + CELL_SIZE // 2, py + CELL_SIZE // 2), 5)
@@ -477,16 +475,16 @@ while running:
                 celula = obter_celula_do_mouse_tabuleiro(evt.pos, PADDING_LEFT_MAQUINA, PADDING_TOP)
                 if celula:
                     linha, coluna = celula
+                    print("celula: ", celula)
                     pos = posicoes(linha, coluna)
                     
                     # Evitar clicar na mesma posição duas vezes
-                    if pos not in posicoes_clicadas_jogador:
-                        posicoes_clicadas_jogador.append(pos)
+                    if pos not in tabuleiro_maquina.clicados:
                         # Registrar o tiro no tabuleiro da máquina
                         resultado = tabuleiro_maquina.registrar_tiro(pos)
                         print(f"Tiro jogador em ({linha}, {coluna}): {resultado}")
                         
-                        # Iniciar timer para próximo turno
+                        # Mudar para turno da máquina e reiniciar temporizador
                         tempo_turno_inicio = 0
                         turno = MAQUINA
     
@@ -496,17 +494,15 @@ while running:
         if tempo_espera_inicio >= TEMPO_ESPERA * 1000:  # Converter para ms
             estado_jogo = JOGANDO
             turno = JOGADOR
-            tempo_turno_inicio = None
+            tempo_turno_inicio = 0
             print("Jogo iniciado! Sua vez!")
     
     # Gerenciar turnos durante o jogo
     if estado_jogo == JOGANDO:
-        if turno == JOGADOR and tempo_turno_inicio is not None:
-            # Se o jogador já jogou, contar tempo até mudar para máquina
+        if turno == JOGADOR:
+            # Contar tempo durante turno do jogador
             tempo_turno_inicio += dt
-            if tempo_turno_inicio >= TEMPO_ENTRE_TURNOS * 1000:
-                turno = MAQUINA
-                tempo_turno_inicio = 0
+            # Jogador tem tempo limitado, ou pode clicar a qualquer momento
         
         elif turno == MAQUINA:
             # Contar tempo para máquina jogar
@@ -516,7 +512,7 @@ while running:
                 jogar_maquina()
                 # Voltar para jogador
                 turno = JOGADOR
-                tempo_turno_inicio = None
+                tempo_turno_inicio = 0
                 print("Sua vez novamente!")
     
     # Desenhar baseado no estado do jogo
