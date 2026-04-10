@@ -1,4 +1,4 @@
-from Campos.Posicoes import posicoes
+from assets.Campos.Posicoes import posicoes
 
 class tiros:
     def tiro_simples(self, posicao, tabuleiro):

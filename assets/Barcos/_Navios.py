@@ -10,16 +10,17 @@ class Navios:
         self.posicoes = posicoes
         
     def acertado(self, posicao):
-        if posicao in self.posicoes:
-            self.atingidos.sort(key=lambda x: (x.linha, x.coluna))
+        if posicao in self.posicoes and posicao not in self.atingidos:
             self.atingidos.append(posicao)
-            if(self.afundou()): return {"status": True, "message": f"Navio {self.nome} afundou"}
-            return {"status": True, "message":f"Navio {self.nome} atingido na posição: {posicao.__str__()}"}
-        return {"status": False, "message":f"Não Atingido"}
-    
+            if self.afundou():
+                return {"status": True, "message": f"Navio {self.nome} afundou"}
+            return {"status": True, "message": f"Navio {self.nome} atingido na posição: {posicao.__str__()}"}
+        return {"status": False, "message": f"Não Atingido"}
+
     def afundou(self):
-        self.posicoes.sort(key=lambda x: (x.linha, x.coluna))
-        if( self.atingidos == self.posicoes):
+        pos_ord = sorted(self.posicoes, key=lambda x: (x.linha, x.coluna))
+        ati_ord = sorted(self.atingidos, key=lambda x: (x.linha, x.coluna))
+        if pos_ord == ati_ord:
             self.afundado = True
         return self.afundado
 

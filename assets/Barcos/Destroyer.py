@@ -1,4 +1,4 @@
-from .Navios import Navios
+from ._Navios import Navios
 
 class destroyer(Navios):
     def __init__(self, nome):

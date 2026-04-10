@@ -19,6 +19,6 @@ class Tabuleiro:
             if resultado["status"]:
                 self.atingidos.append(posicao)
                 self.clicados.append(posicao)
-                return resultado
+                return {"hit": True, "sunk": navio.afundado}
         self.clicados.append(posicao)
-        return {"status": False, "message": "Tiro na água"}
+        return {"hit": False, "sunk": False}
